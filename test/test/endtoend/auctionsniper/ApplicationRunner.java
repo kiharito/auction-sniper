@@ -1,5 +1,8 @@
 package test.endtoend.auctionsniper;
 
+import auctionsniper.Main;
+
+import static auctionsniper.ui.MainWindow.*;
 import static test.endtoend.auctionsniper.FakeAuctionServer.*;
 
 public class ApplicationRunner {
