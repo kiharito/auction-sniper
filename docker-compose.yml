@@ -7,5 +7,6 @@ services:
       - "7777:7777"
     volumes:
       - openfire-data:/var/lib/openfire
+    platform: linux/x86_64
 volumes:
   openfire-data:
