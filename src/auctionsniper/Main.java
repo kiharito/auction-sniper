@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Main {
+public class Main implements AuctionEventListener {
     @SuppressWarnings("unused")
     private Chat notToBeGCd;
     private MainWindow ui;
@@ -35,13 +35,13 @@ public class Main {
 
     private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
         disconnectWhenUICloses(connection);
-        Chat chat = connection.getChatManager().createChat(
-                auctionId(itemId, connection), (aChat, message) -> {
-                    SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-                }
-        );
+        Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), new AuctionMessageTranslator(this));
         this.notToBeGCd = chat;
         chat.sendMessage(JOIN_COMMAND_FORMAT);
+    }
+
+    public void auctionClosed() {
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
     }
 
     private void disconnectWhenUICloses(final XMPPConnection connection) {
