@@ -44,6 +44,9 @@ public class Main implements AuctionEventListener {
         SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
     }
 
+    public void currentPrice(int price, int increment) {
+    }
+
     private void disconnectWhenUICloses(final XMPPConnection connection) {
         ui.addWindowListener(new WindowAdapter() {
             @Override
