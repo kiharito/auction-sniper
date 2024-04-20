@@ -4,11 +4,12 @@ import auctionsniper.ui.MainWindow;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class Main {
+public class Main implements AuctionEventListener {
     @SuppressWarnings("unused")
     private Chat notToBeGCd;
     private MainWindow ui;
@@ -19,6 +20,8 @@ public class Main {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String ACCOUNT_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
+    public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
+    public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 
     public Main() throws Exception {
         startUserInterface();
@@ -31,13 +34,26 @@ public class Main {
     }
 
     private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
-        final Chat chat = connection.getChatManager().createChat(
-                auctionId(itemId, connection), (aChat, message) -> {
-                    SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-                }
-        );
+        disconnectWhenUICloses(connection);
+        Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), new AuctionMessageTranslator(this));
         this.notToBeGCd = chat;
-        chat.sendMessage(new Message());
+        chat.sendMessage(JOIN_COMMAND_FORMAT);
+    }
+
+    public void auctionClosed() {
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
+    }
+
+    public void currentPrice(int price, int increment) {
+    }
+
+    private void disconnectWhenUICloses(final XMPPConnection connection) {
+        ui.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                connection.disconnect();
+            }
+        });
     }
 
     private static XMPPConnection connectTo(String hostname, String username, String password) throws XMPPException {
