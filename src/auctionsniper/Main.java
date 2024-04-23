@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Main implements SniperListener {
+public class Main {
     @SuppressWarnings("unused")
     private Chat notToBeGCd;
     private MainWindow ui;
@@ -37,15 +37,9 @@ public class Main implements SniperListener {
         disconnectWhenUICloses(connection);
         final Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
         this.notToBeGCd = chat;
-        Auction auction = amount -> {
-            try {
-                chat.sendMessage(String.format(BID_COMMAND_FORMAT, amount));
-            } catch (XMPPException e) {
-                e.printStackTrace();
-            }
-        };
-        chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
-        chat.sendMessage(JOIN_COMMAND_FORMAT);
+        Auction auction = new XMPPAuction(chat);
+        chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, new SniperStateDisplayer())));
+        auction.join();
     }
 
     private void disconnectWhenUICloses(final XMPPConnection connection) {
@@ -73,13 +67,25 @@ public class Main implements SniperListener {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
 
-    @Override
-    public void sniperLost() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-    }
+    public class SniperStateDisplayer implements SniperListener {
 
-    @Override
-    public void sniperBidding() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
+        @Override
+        public void sniperLost() {
+            showStatus(MainWindow.STATUS_LOST);
+        }
+
+        @Override
+        public void sniperBidding() {
+            showStatus(MainWindow.STATUS_BIDDING);
+        }
+
+        @Override
+        public void sniperWinning() {
+            showStatus(MainWindow.STATUS_WINNING);
+        }
+
+        private void showStatus(final String status) {
+            SwingUtilities.invokeLater(() -> ui.showStatus(status));
+        }
     }
 }
