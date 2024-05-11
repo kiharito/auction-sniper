@@ -1,5 +1,6 @@
 package test.unit.auctionsniper;
 
+import auctionsniper.AuctionEventListener;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
 import auctionsniper.Auction;
@@ -31,6 +32,6 @@ public class AuctionSniperTest {
             oneOf(auction).bid(price + increment);
             atLeast(1).of(sniperListener).sniperBidding();
         }});
-        sniper.currentPrice(price, increment);
+        sniper.currentPrice(price, increment, AuctionEventListener.PriceSource.FromOtherBidder);
     }
 }
