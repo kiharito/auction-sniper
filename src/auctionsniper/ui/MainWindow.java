@@ -1,6 +1,6 @@
 package auctionsniper.ui;
 
-import auctionsniper.SniperState;
+import auctionsniper.SniperSnapshot;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,8 +25,8 @@ public class MainWindow extends JFrame {
         setVisible(true);
     }
 
-    public void sniperStatusChanged(SniperState sniperState, String statusText) {
-        snipers.sniperStatusChanged(sniperState, statusText);
+    public void sniperStatusChanged(SniperSnapshot sniperSnapshot, String statusText) {
+        snipers.sniperStatusChanged(sniperSnapshot, statusText);
     }
 
     private void fillContentPane(JTable snipersTable) {
