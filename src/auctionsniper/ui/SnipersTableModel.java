@@ -41,11 +41,6 @@ public class SnipersTableModel extends AbstractTableModel {
         }
     }
 
-    public void setStatusText(String newStatusText) {
-        statusText = newStatusText;
-        fireTableRowsUpdated(0, 0);
-    }
-
     public void sniperStatusChanged(SniperSnapshot newSniperSnapshot, String newStatusText) {
         sniperSnapshot = newSniperSnapshot;
         statusText = newStatusText;
