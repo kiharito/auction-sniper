@@ -1,12 +1,13 @@
 package auctionsniper.ui;
 
 import auctionsniper.Column;
+import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
 
 import javax.swing.table.AbstractTableModel;
 
-public class SnipersTableModel extends AbstractTableModel {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener {
     private static final String[] STATUS_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won"};
     private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
     private SniperSnapshot sniperSnapshot = STARTING_UP;
@@ -26,7 +27,8 @@ public class SnipersTableModel extends AbstractTableModel {
         return Column.at(columnIndex).valueIn(sniperSnapshot);
     }
 
-    public void sniperStatusChanged(SniperSnapshot newSniperSnapshot) {
+    @Override
+    public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
         this.sniperSnapshot = newSniperSnapshot;
         fireTableRowsUpdated(0, 0);
     }
