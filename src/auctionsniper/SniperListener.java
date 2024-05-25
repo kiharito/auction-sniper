@@ -7,7 +7,7 @@ public interface SniperListener extends EventListener {
 
     void sniperWon();
 
-    void sniperBidding();
+    void sniperBidding(SniperState sniperState);
 
     void sniperWinning();
 }
