@@ -82,10 +82,5 @@ public class Main {
         public void sniperWon(SniperSnapshot sniperSnapshot) {
             SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(sniperSnapshot));
         }
-
-        @Override
-        public void sniperWinning(SniperSnapshot sniperSnapshot) {
-            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(sniperSnapshot));
-        }
     }
 }
