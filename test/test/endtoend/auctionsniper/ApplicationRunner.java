@@ -39,7 +39,7 @@ public class ApplicationRunner {
     }
 
     public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(itemId, 0, 0, STATUS_LOST);
+        driver.showsSniperStatus(STATUS_LOST);
     }
 
     public void showsSniperHasWonAuction(int lastPrice) {
