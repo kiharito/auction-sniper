@@ -12,7 +12,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FakeAuctionServer {
@@ -77,8 +77,7 @@ public class FakeAuctionServer {
 
         public void receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
             final Message message = messages.poll(5, TimeUnit.SECONDS);
-            assertThat("Message", message, is(notNullValue()));
-            assertThat(message.getBody(), messageMatcher);
+            assertThat(message, hasProperty("body", messageMatcher));
         }
     }
 }
