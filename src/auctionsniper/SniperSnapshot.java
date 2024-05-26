@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.Objects;
+
 public class SniperSnapshot {
     public final String itemId;
     public final int lastPrice;
@@ -33,6 +35,9 @@ public class SniperSnapshot {
         return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING);
     }
 
+    public boolean isForSameItemAs(SniperSnapshot other) {
+        return Objects.equals(itemId, other.itemId);
+    }
 
     @Override
     public boolean equals(Object obj) {

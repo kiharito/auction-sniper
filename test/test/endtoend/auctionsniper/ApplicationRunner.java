@@ -29,8 +29,8 @@ public class ApplicationRunner {
         driver = new AuctionSniperDriver(1000);
         driver.hasTitle(MainWindow.APPLICATION_TITLE);
         driver.hasColumnTitles();
-        for (FakeAuctionServer ignored : auctions) {
-            driver.showsSniperStatus(SnipersTableModel.textFor(SniperState.JOINING));
+        for (FakeAuctionServer auction : auctions) {
+            driver.showsSniperStatus(auction.getItemId(), 0, 0, SnipersTableModel.textFor(SniperState.JOINING));
         }
     }
 
