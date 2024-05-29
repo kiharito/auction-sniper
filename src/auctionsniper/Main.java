@@ -40,10 +40,12 @@ public class Main {
         ui.addUserRequestListener(itemId -> {
             snipers.addSniper(SniperSnapshot.joining(itemId));
             Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
+            Announcer<AuctionEventListener> auctionEventListeners = Announcer.to(AuctionEventListener.class);
+            chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(), auctionEventListeners.announce()));
             notToBeGCd.add(chat);
 
             Auction auction = new XMPPAuction(chat);
-            chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(), new AuctionSniper(itemId, auction, new SwingThreadSniperListener())));
+            auctionEventListeners.addListener(new AuctionSniper(itemId, auction, new SwingThreadSniperListener()));
             auction.join();
         });
     }
