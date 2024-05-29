@@ -2,7 +2,6 @@ package auctionsniper;
 
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
-import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 
 public class Main {
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private final ArrayList<Chat> notToBeGCd = new ArrayList<>();
+    private final ArrayList<Auction> notToBeGCd = new ArrayList<>();
     private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
     private static final int ARG_HOSTNAME = 0;
@@ -39,13 +38,10 @@ public class Main {
     private void addUserRequestListenerFor(final XMPPConnection connection) {
         ui.addUserRequestListener(itemId -> {
             snipers.addSniper(SniperSnapshot.joining(itemId));
-            Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
-            Announcer<AuctionEventListener> auctionEventListeners = Announcer.to(AuctionEventListener.class);
-            chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(), auctionEventListeners.announce()));
-            notToBeGCd.add(chat);
+            Auction auction = new XMPPAuction(connection, itemId);
+            notToBeGCd.add(auction);
 
-            Auction auction = new XMPPAuction(chat);
-            auctionEventListeners.addListener(new AuctionSniper(itemId, auction, new SwingThreadSniperListener()));
+            auction.addAuctionEventListener(new AuctionSniper(itemId, auction, new SwingThreadSniperListener()));
             auction.join();
         });
     }
@@ -65,10 +61,6 @@ public class Main {
         connection.login(username, password, AUCTION_RESOURCE);
 
         return connection;
-    }
-
-    private static String auctionId(String itemId, XMPPConnection connection) {
-        return String.format(ACCOUNT_ID_FORMAT, itemId, connection.getServiceName());
     }
 
     public class SwingThreadSniperListener implements SniperListener {
