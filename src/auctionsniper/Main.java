@@ -7,11 +7,8 @@ import auctionsniper.xmpp.XMPPAuctionHouse;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 public class Main {
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private final ArrayList<Auction> notToBeGCd = new ArrayList<>();
     private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
     private static final int ARG_HOSTNAME = 0;
@@ -30,14 +27,7 @@ public class Main {
     }
 
     private void addUserRequestListenerFor(final AuctionHouse auctionHouse) {
-        ui.addUserRequestListener(itemId -> {
-            snipers.addSniper(SniperSnapshot.joining(itemId));
-            Auction auction = auctionHouse.auctionFor(itemId);
-            notToBeGCd.add(auction);
-
-            auction.addAuctionEventListener(new AuctionSniper(itemId, auction, new SwingThreadSniperListener()));
-            auction.join();
-        });
+        ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
     }
 
     private void disconnectWhenUICloses(final XMPPAuctionHouse auctionHouse) {
@@ -50,7 +40,13 @@ public class Main {
     }
 
 
-    public class SwingThreadSniperListener implements SniperListener {
+    public static class SwingThreadSniperListener implements SniperListener {
+        private final SnipersTableModel snipers;
+
+        public SwingThreadSniperListener(SnipersTableModel snipers) {
+            this.snipers = snipers;
+        }
+
         @Override
         public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
             SwingUtilities.invokeLater(() -> snipers.sniperStateChanged(sniperSnapshot));
