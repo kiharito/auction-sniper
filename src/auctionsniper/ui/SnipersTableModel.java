@@ -1,6 +1,5 @@
 package auctionsniper.ui;
 
-import auctionsniper.Column;
 import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;

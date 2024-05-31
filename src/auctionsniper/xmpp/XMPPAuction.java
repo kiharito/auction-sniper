@@ -1,7 +1,10 @@
-package auctionsniper;
+package auctionsniper.xmpp;
 
 import static auctionsniper.Main.*;
 
+import auctionsniper.Announcer;
+import auctionsniper.Auction;
+import auctionsniper.AuctionEventListener;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;

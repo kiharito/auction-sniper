@@ -1,6 +1,6 @@
-package test.unit.auctionsniper;
+package test.unit.auctionsniper.xmpp;
 
-import auctionsniper.AuctionMessageTranslator;
+import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.AuctionEventListener;
 
 import static auctionsniper.AuctionEventListener.PriceSource;

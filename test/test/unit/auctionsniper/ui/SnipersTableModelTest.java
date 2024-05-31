@@ -1,6 +1,6 @@
-package test.unit.auctionsniper;
+package test.unit.auctionsniper.ui;
 
-import auctionsniper.Column;
+import auctionsniper.ui.Column;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.ui.SnipersTableModel;
 import com.objogate.exception.Defect;
