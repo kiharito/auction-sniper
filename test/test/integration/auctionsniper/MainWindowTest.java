@@ -3,6 +3,7 @@ package test.integration.auctionsniper;
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
 import com.objogate.wl.swing.probe.ValueMatcherProbe;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import test.endtoend.auctionsniper.AuctionSniperDriver;
 
@@ -21,5 +22,10 @@ public class MainWindowTest {
 
         driver.startBiddingFor("item1");
         driver.check(buttonProbe);
+    }
+
+    @AfterEach
+    void stopDriver() {
+        driver.dispose();
     }
 }
