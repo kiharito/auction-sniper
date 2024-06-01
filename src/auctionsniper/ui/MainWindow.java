@@ -1,11 +1,14 @@
 package auctionsniper.ui;
 
 import auctionsniper.Announcer;
+import auctionsniper.Item;
 import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
 public class MainWindow extends JFrame {
@@ -63,7 +66,22 @@ public class MainWindow extends JFrame {
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
-        joinAuctionButton.addActionListener(e -> userRequests.announce().joinAuction(itemIdField.getText()));
+        joinAuctionButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        userRequests.announce().joinAuction(new Item(itemId(), stopPrice()));
+                    }
+
+                    private String itemId() {
+                        return itemIdField.getText();
+                    }
+
+                    private int stopPrice() {
+                        return ((Number) stopPriceField.getValue()).intValue();
+                    }
+                }
+        );
         controls.add(joinAuctionButton);
 
         return controls;
