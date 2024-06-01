@@ -1,13 +1,8 @@
 package auctionsniper;
 
 import auctionsniper.ui.SnipersTableModel;
-import auctionsniper.ui.SwingThreadSniperListener;
-
-import java.util.ArrayList;
 
 public class SniperLauncher implements UserRequestListener {
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private final ArrayList<Auction> notToBeGCd = new ArrayList<>();
     private final AuctionHouse auctionHouse;
     private final SnipersTableModel snipers;
 
@@ -18,13 +13,10 @@ public class SniperLauncher implements UserRequestListener {
 
     @Override
     public void joinAuction(String itemId) {
-        snipers.addSniper(SniperSnapshot.joining(itemId));
         Auction auction = auctionHouse.auctionFor(itemId);
-        notToBeGCd.add(auction);
-
         AuctionSniper sniper = new AuctionSniper(itemId, auction);
-        sniper.addSniperListener(new SwingThreadSniperListener(snipers));
         auction.addAuctionEventListener(sniper);
+        snipers.addSniper(sniper);
         auction.join();
     }
 }
