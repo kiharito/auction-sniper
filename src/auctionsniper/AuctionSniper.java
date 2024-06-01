@@ -2,13 +2,16 @@ package auctionsniper;
 
 public class AuctionSniper implements AuctionEventListener {
     private final Auction auction;
-    private final SniperListener sniperListener;
+    private SniperListener sniperListener;
     private SniperSnapshot sniperSnapshot;
 
-    public AuctionSniper(String itemId, Auction auction, SniperListener sniperListener) {
+    public AuctionSniper(String itemId, Auction auction) {
         this.auction = auction;
-        this.sniperListener = sniperListener;
         this.sniperSnapshot = SniperSnapshot.joining(itemId);
+    }
+
+    public void addSniperListener(SniperListener sniperListener) {
+        this.sniperListener = sniperListener;
     }
 
     @Override

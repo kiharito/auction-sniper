@@ -22,7 +22,9 @@ public class SniperLauncher implements UserRequestListener {
         Auction auction = auctionHouse.auctionFor(itemId);
         notToBeGCd.add(auction);
 
-        auction.addAuctionEventListener(new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers)));
+        AuctionSniper sniper = new AuctionSniper(itemId, auction);
+        sniper.addSniperListener(new SwingThreadSniperListener(snipers));
+        auction.addAuctionEventListener(sniper);
         auction.join();
     }
 }
