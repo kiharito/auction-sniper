@@ -41,10 +41,9 @@ public class AuctionSniperTest {
 
     @Test
     void reportsLostIfAuctionClosesWhenBidding() {
+        ignoringAuction();
         allowingSniperBidding();
         context.checking(new Expectations() {{
-            ignoring(auction);
-
             atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.LOST)));
             when(sniperState.is("bidding"));
         }});
@@ -54,8 +53,8 @@ public class AuctionSniperTest {
 
     @Test
     void reportsWonIfAuctionClosesWhenWinning() {
+        ignoringAuction();
         context.checking(new Expectations() {{
-            ignoring(auction);
             allowing(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.WINNING)));
             then(sniperState.is("winning"));
 
@@ -81,10 +80,9 @@ public class AuctionSniperTest {
 
     @Test
     void reportsIsWinningWhenCurrentPriceComesFromSniper() {
+        ignoringAuction();
         allowingSniperBidding();
         context.checking(new Expectations() {{
-            ignoring(auction);
-
             atLeast(1).of(sniperListener).sniperStateChanged(new SniperSnapshot(ITEM_ID, 135, 135, SniperState.WINNING));
             when(sniperState.is("bidding"));
         }});
@@ -107,6 +105,17 @@ public class AuctionSniperTest {
         sniper.currentPrice(2345, 25, PriceSource.FromOtherBidder);
     }
 
+    @Test
+    void reportsFailedIfAuctionFailsWhenBidding() {
+        ignoringAuction();
+        allowingSniperBidding();
+
+        expectSniperToFailWhenItIs("bidding");
+
+        sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+        sniper.auctionFailed();
+    }
+
     private Matcher<SniperSnapshot> aSniperThatIs(final SniperState state) {
         return new FeatureMatcher<>(equalTo(state), "sniper that is ", "was") {
             @Override
@@ -116,10 +125,25 @@ public class AuctionSniperTest {
         };
     }
 
+    private void ignoringAuction() {
+        context.checking(new Expectations() {{
+            ignoring(auction);
+        }});
+    }
+
     private void allowingSniperBidding() {
         context.checking(new Expectations() {{
             allowing(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.BIDDING)));
             then(sniperState.is("bidding"));
+        }});
+    }
+
+    private void expectSniperToFailWhenItIs(final String state) {
+        context.checking(new Expectations() {{
+            atLeast(1).of(sniperListener).sniperStateChanged(
+                    new SniperSnapshot(ITEM_ID, 0, 0, SniperState.FAILED)
+            );
+            when(sniperState.is(state));
         }});
     }
 }
