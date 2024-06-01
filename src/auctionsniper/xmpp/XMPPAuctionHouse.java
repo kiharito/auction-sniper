@@ -28,6 +28,10 @@ public class XMPPAuctionHouse implements AuctionHouse {
 
     @Override
     public Auction auctionFor(String itemId) {
-        return new XMPPAuction(connection, itemId);
+        return new XMPPAuction(connection, auctionId(itemId, connection));
+    }
+
+    private String auctionId(String itemId, XMPPConnection connection) {
+        return String.format(ACCOUNT_ID_FORMAT, itemId, connection.getServiceName());
     }
 }
