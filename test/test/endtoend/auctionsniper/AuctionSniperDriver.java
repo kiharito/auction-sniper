@@ -10,7 +10,6 @@ import com.objogate.wl.swing.gesture.GesturePerformer;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
-import static org.hamcrest.Matchers.equalTo;
 import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.*;
 import static com.objogate.wl.swing.matcher.JLabelTextMatcher.*;
 
@@ -22,10 +21,6 @@ public class AuctionSniperDriver extends JFrameDriver {
     public void startBiddingFor(String itemId) {
         itemIdField().replaceAllText(itemId);
         bidButton().click();
-    }
-
-    public void showsSniperStatus(String statusText) {
-        new JTableDriver(this).hasCell(withLabelText(equalTo(statusText)));
     }
 
     public void showsSniperStatus(String itemId, int lastPrice, int lastBid, String statusText) {

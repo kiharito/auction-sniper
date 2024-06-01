@@ -30,8 +30,8 @@ public class ApplicationRunner {
         driver.showsSniperStatus(auction.getItemId(), winningBid, winningBid, SnipersTableModel.textFor(SniperState.WINNING));
     }
 
-    public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(SnipersTableModel.textFor(SniperState.LOST));
+    public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid, SnipersTableModel.textFor(SniperState.LOST));
     }
 
     public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
