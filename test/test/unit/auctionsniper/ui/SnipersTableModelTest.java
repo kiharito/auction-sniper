@@ -2,6 +2,7 @@ package test.unit.auctionsniper.ui;
 
 import auctionsniper.Auction;
 import auctionsniper.AuctionSniper;
+import auctionsniper.Item;
 import auctionsniper.ui.Column;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.ui.SnipersTableModel;
@@ -26,7 +27,7 @@ public class SnipersTableModelTest {
     private final JUnit5Mockery context = new JUnit5Mockery();
     private final TableModelListener listener = context.mock(TableModelListener.class);
     private final Auction auction = context.mock(Auction.class);
-    private final AuctionSniper sniper = new AuctionSniper("item0", auction);
+    private final AuctionSniper sniper = new AuctionSniper(new Item("item0", Integer.MAX_VALUE), auction);
     private final SnipersTableModel model = new SnipersTableModel();
 
     @BeforeEach
@@ -75,7 +76,7 @@ public class SnipersTableModelTest {
 
     @Test
     public void holdsSnipersInAdditionOrder() {
-        AuctionSniper sniper2 = new AuctionSniper("item1", auction);
+        AuctionSniper sniper2 = new AuctionSniper(new Item("item1", Integer.MAX_VALUE), auction);
         context.checking(new Expectations() {{
             ignoring(listener);
         }});
@@ -89,7 +90,7 @@ public class SnipersTableModelTest {
 
     @Test
     public void updatesCorrectRowForSniper() {
-        AuctionSniper sniper2 = new AuctionSniper("item1", auction);
+        AuctionSniper sniper2 = new AuctionSniper(new Item("item1", Integer.MAX_VALUE), auction);
         SniperSnapshot bidding1 = sniper.getSniperSnapshot().bidding(100, 123);
         context.checking(new Expectations() {{
             ignoring(listener);
@@ -105,7 +106,7 @@ public class SnipersTableModelTest {
 
     @Test
     public void throwsDefectIfNoExistingSniperForAnUpdate() {
-        AuctionSniper sniper2 = new AuctionSniper("item1", auction);
+        AuctionSniper sniper2 = new AuctionSniper(new Item("item1", Integer.MAX_VALUE), auction);
         SniperSnapshot bidding1 = sniper.getSniperSnapshot().bidding(100, 123);
         context.checking(new Expectations() {{
             ignoring(listener);
