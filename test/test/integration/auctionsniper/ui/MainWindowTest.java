@@ -1,16 +1,17 @@
-package test.integration.auctionsniper;
+package test.integration.auctionsniper.ui;
 
+import auctionsniper.SniperPortfolio;
 import auctionsniper.ui.MainWindow;
-import auctionsniper.ui.SnipersTableModel;
 import com.objogate.wl.swing.probe.ValueMatcherProbe;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import test.endtoend.auctionsniper.AuctionSniperDriver;
 
 import static org.hamcrest.Matchers.*;
 
 public class MainWindowTest {
-    private final SnipersTableModel tableModel = new SnipersTableModel();
-    private final MainWindow mainWindow = new MainWindow(tableModel);
+    private final SniperPortfolio portfolio = new SniperPortfolio();
+    private final MainWindow mainWindow = new MainWindow(portfolio);
     private final AuctionSniperDriver driver = new AuctionSniperDriver(100);
 
     @Test
@@ -21,5 +22,10 @@ public class MainWindowTest {
 
         driver.startBiddingFor("item1");
         driver.check(buttonProbe);
+    }
+
+    @AfterEach
+    void stopDriver() {
+        driver.dispose();
     }
 }

@@ -83,6 +83,7 @@ class AuctionSniperEndToEndTest {
     @AfterEach
     void stopAuction() {
         auction.stop();
+        auction2.stop();
     }
 
     @AfterEach
