@@ -1,6 +1,7 @@
 package auctionsniper;
 
 import auctionsniper.ui.SnipersTableModel;
+import auctionsniper.ui.SwingThreadSniperListener;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class SniperLauncher implements UserRequestListener {
         Auction auction = auctionHouse.auctionFor(itemId);
         notToBeGCd.add(auction);
 
-        auction.addAuctionEventListener(new AuctionSniper(itemId, auction, new Main.SwingThreadSniperListener(snipers)));
+        auction.addAuctionEventListener(new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers)));
         auction.join();
     }
 }
