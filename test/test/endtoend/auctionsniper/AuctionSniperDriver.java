@@ -19,11 +19,6 @@ public class AuctionSniperDriver extends JFrameDriver {
         super(new GesturePerformer(), JFrameDriver.topLevelFrame(named(MAIN_WINDOW_NAME), showingOnScreen()), new AWTEventQueueProber(timeoutMillis, 100));
     }
 
-    public void startBiddingFor(String itemId) {
-        itemIdField().replaceAllText(itemId);
-        bidButton().click();
-    }
-
     public void startBiddingFor(String itemId, int stopPrice) {
         itemIdField().replaceAllText(itemId);
         stopPriceField().replaceAllText(String.valueOf(stopPrice));

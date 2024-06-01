@@ -20,7 +20,7 @@ public class MainWindowTest {
 
         mainWindow.addUserRequestListener(buttonProbe::setReceivedValue);
 
-        driver.startBiddingFor("item1");
+        driver.startBiddingFor("item1", 789);
         driver.check(buttonProbe);
     }
 
