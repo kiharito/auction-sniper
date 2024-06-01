@@ -10,7 +10,7 @@ import java.util.logging.LogManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AuctionLogDriver {
-    public static String LOG_FILE_NAME = "auction-sniper.log";
+    public static String LOG_FILE_NAME = "log/auction-sniper.log";
     private final File logFIle = new File(LOG_FILE_NAME);
 
     public void hasEntry(Matcher<String> matcher) throws IOException {
