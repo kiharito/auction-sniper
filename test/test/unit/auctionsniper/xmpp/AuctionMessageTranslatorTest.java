@@ -55,4 +55,26 @@ public class AuctionMessageTranslatorTest {
 
         translator.processMessage(UNUSED_CHAT, message);
     }
+
+    @Test
+    void notifiesAuctionFailedWhenBadMessageReceived() {
+        context.checking(new Expectations() {{
+            exactly(1).of(listener).auctionFailed();
+        }});
+        Message message = new Message();
+        message.setBody("bad message");
+
+        translator.processMessage(UNUSED_CHAT, message);
+    }
+
+    @Test
+    void notifiesAuctionFailedWhenEventTypeMissing() {
+        context.checking(new Expectations() {{
+            exactly(1).of(listener).auctionFailed();
+        }});
+        Message message = new Message();
+        message.setBody("SOLVersion: 1.1; CurrentPrice: 234; Increment: 5; Bidder: " + SNIPER_ID + ";");
+
+        translator.processMessage(UNUSED_CHAT, message);
+    }
 }
