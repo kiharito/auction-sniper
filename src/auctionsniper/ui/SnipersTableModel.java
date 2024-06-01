@@ -38,12 +38,6 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     }
 
     @Override
-    public void addSniper(SniperSnapshot sniperSnapshot) {
-        this.sniperSnapshots.add(sniperSnapshot);
-        fireTableRowsInserted(0, 0);
-    }
-
-    @Override
     public void sniperAdded(AuctionSniper sniper) {
         sniperSnapshots.add(sniper.getSniperSnapshot());
         int row = sniperSnapshots.size() - 1;
