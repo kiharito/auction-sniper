@@ -1,14 +1,12 @@
 package auctionsniper;
 
-import auctionsniper.ui.SnipersTableModel;
-
 public class SniperLauncher implements UserRequestListener {
     private final AuctionHouse auctionHouse;
-    private final SnipersTableModel snipers;
+    private final SniperCollector collector;
 
-    public SniperLauncher(AuctionHouse auctionHouse1, SnipersTableModel snipers1) {
-        this.auctionHouse = auctionHouse1;
-        this.snipers = snipers1;
+    public SniperLauncher(AuctionHouse auctionHouse, SniperCollector collector) {
+        this.auctionHouse = auctionHouse;
+        this.collector = collector;
     }
 
     @Override
@@ -16,7 +14,7 @@ public class SniperLauncher implements UserRequestListener {
         Auction auction = auctionHouse.auctionFor(itemId);
         AuctionSniper sniper = new AuctionSniper(itemId, auction);
         auction.addAuctionEventListener(sniper);
-        snipers.addSniper(sniper);
+        collector.addSniper(sniper);
         auction.join();
     }
 }
