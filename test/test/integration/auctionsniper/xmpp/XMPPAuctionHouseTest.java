@@ -27,7 +27,7 @@ public class XMPPAuctionHouseTest {
     }
 
     @BeforeEach
-    void prepareAuctionHouse() throws XMPPException {
+    void prepareAuctionHouse() throws XMPPException, XMPPAuctionHouse.XMPPPAuctionException {
         auctionHouse = XMPPAuctionHouse.connect(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD);
     }
 
@@ -54,6 +54,11 @@ public class XMPPAuctionHouseTest {
 
             @Override
             public void currentPrice(int price, int increment, PriceSource priceSource) {
+
+            }
+
+            @Override
+            public void auctionFailed() {
 
             }
         };

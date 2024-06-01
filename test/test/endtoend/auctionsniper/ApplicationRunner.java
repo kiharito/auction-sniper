@@ -5,13 +5,17 @@ import auctionsniper.SniperState;
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
 
+import java.io.IOException;
+
 import static test.endtoend.auctionsniper.FakeAuctionServer.*;
+import static org.hamcrest.Matchers.*;
 
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";
     public static final String SNIPER_PASSWORD = "sniper";
     public static final String SNIPER_XMPP_ID = "sniper@localhost/Auction";
     private AuctionSniperDriver driver;
+    private final AuctionLogDriver logDriver = new AuctionLogDriver();
 
     public void startBiddingIn(final FakeAuctionServer... auctions) {
         startSniper();
@@ -50,6 +54,14 @@ public class ApplicationRunner {
         driver.showsSniperStatus(auction.getItemId(), lastPrice, lastPrice, SnipersTableModel.textFor(SniperState.WON));
     }
 
+    public void showsSniperHasFailed(FakeAuctionServer auction) {
+        driver.showsSniperStatus(auction.getItemId(), 0, 0, SnipersTableModel.textFor(SniperState.FAILED));
+    }
+
+    public void reportsInvalidMessage(FakeAuctionServer auction, String message) throws IOException {
+        logDriver.hasEntry(containsString(message));
+    }
+
     public void stop() {
         if (driver != null) {
             driver.dispose();
@@ -65,6 +77,7 @@ public class ApplicationRunner {
     }
 
     private void startSniper() {
+        logDriver.clearLog();
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
